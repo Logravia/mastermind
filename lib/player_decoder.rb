@@ -12,6 +12,17 @@ class PlayerDecoder
     @cur_guess = Array.new(4)
   end
 
+  def guess
+    reset_guess
+    loop do
+      save(format_choice(location_letter))
+      break if cur_guess.none? nil
+    end
+    cur_guess
+  end
+
+  private
+
   def bad_input_msg
     puts 'Sorry, bad input. Try again or press q to quit.'
   end
@@ -30,9 +41,9 @@ class PlayerDecoder
     exit if choice == 'q'
     until valid_input?(choice)
       bad_input_msg
-      location_letter
+      choice = location_letter
     end
-    format_choice(choice)
+    choice
   end
 
   def valid_input?(choice)
@@ -47,21 +58,11 @@ class PlayerDecoder
     cur_guess[location - 1] = LETTER_COLOR[letter]
   end
 
-  def construct_guess
-    loop do
-      save(location_letter)
-      break if cur_guess.none? nil
-    end
-  end
-
   def reset_guess
     cur_guess.map! { nil }
   end
 
-  private_constant :LETTER_COLOR
-  attr_reader :cur_guess
-
-  private
-
+  private_constant :LETTER_COLOR, :MIN_CHOICE, :MAX_CHOICE
   attr_writer :cur_guess
+  attr_reader :cur_guess
 end

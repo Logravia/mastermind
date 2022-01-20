@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'pry-byebug'
-# Manages creation of a random color code, checking it against player's guess and giving hints based on the guess
+# Manages creation of a random color code, checking it against player's guess and giving hint based on the guess
 class ComputerCoder
   NUM_FOR_COLOR = { 1 => 'RED', 2 => 'GREEN', 3 => 'BLUE', 4 => 'YELLOW', 5 => 'ORANGE', 6 => 'PURPLE' }.freeze
   MIN_COLOR = 1
@@ -10,6 +10,15 @@ class ComputerCoder
     @code_to_break = random_code
   end
 
+  def hint(guess)
+    { perfect: matches(guess), partial: partial_matches(guess) }
+  end
+
+  def perfect_guess?(guess)
+    guess == code_to_break
+  end
+
+  private
   def matches(guess)
     perfect_matches = 0
     guess.each_with_index do |color, location|
@@ -24,6 +33,8 @@ class ComputerCoder
   # Each element that was the same and at the same location in both arrays
   # Is replaced with nil, in other words perfect matches are removed
   def no_perfect_matches(guess, code)
+   guess = guess.dup
+   code = code.dup
     guess.each_with_index do |color, location|
       if code[location] == color
         guess[location] = nil
@@ -46,10 +57,6 @@ class ComputerCoder
     partial_match_count
   end
 
-  def give_hints(guess)
-    { perfect: matches(guess), partial: partial_matches(guess) }
-  end
-
   def random_code
     code = []
     until code.length == 4
@@ -58,6 +65,7 @@ class ComputerCoder
     end
     code
   end
+
   attr_reader :code_to_break
 
   private_constant :NUM_FOR_COLOR, :MIN_COLOR, :MAX_COLOR
