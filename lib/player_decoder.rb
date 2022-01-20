@@ -4,7 +4,7 @@ require 'pry-byebug'
 
 # Manages input from player to construct a code
 class PlayerDecoder
-  LETTER_COLOR = { R: 'RED', G: 'GREEN', B: 'BLUE', Y: 'YELLOW', O: 'ORANGE', P: 'PURPLE' }.freeze
+  LETTER_COLOR = { R: 'RED', G: 'GREEN', B: 'BLUE', Y: 'YELLOW', C: 'CYAN', P: 'PURPLE' }.freeze
   MIN_CHOICE = 1
   MAX_CHOICE = 4
 
@@ -15,7 +15,7 @@ class PlayerDecoder
   def guess
     reset_guess
     loop do
-      save(format_choice(location_letter))
+      save_choices(get_choices)
       break if cur_guess.none? nil
     end
     cur_guess
@@ -24,7 +24,7 @@ class PlayerDecoder
   private
 
   def bad_input_msg
-    puts 'Sorry, bad input. Try again or press q to quit.'
+    puts 'Seems like your input was invalid. Try again or press q to quit.'
   end
 
   # Turns raw String input into [location_int, :color_letter]
@@ -34,23 +34,21 @@ class PlayerDecoder
     [location, letter_sym]
   end
 
-  # Gets location and letter of the color from player
-  def location_letter
-    print 'Please input location and color: '
-    choice = gets.chomp
-    exit if choice == 'q'
-    until valid_input?(choice)
-      bad_input_msg
-      choice = location_letter
-    end
-    choice
+  def get_choices()
+    print "> "
+    input = gets
+    exit if input == "q\n"
+    # Pattern gets you 1R, but only if whitespace follows it
+    pattern = /[1-4][RGBYOP](?=\s)/
+    choices = input.scan(pattern)
+    bad_input_msg if choices.length == 0
+    choices
   end
 
-  def valid_input?(choice)
-    return false if choice.chars.length != 2
-
-    location, letter = format_choice(choice)
-    location.between?(MIN_CHOICE, MAX_CHOICE) and LETTER_COLOR.key? letter
+  def save_choices(choices)
+    choices[0...4].each do |choice|
+     save(format_choice(choice))
+    end
   end
 
   def save(choice)
