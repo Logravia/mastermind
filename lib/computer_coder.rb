@@ -3,7 +3,7 @@
 require 'pry-byebug'
 # Manages creation of a random color code, checking it against player's guess and giving hint based on the guess
 class ComputerCoder
-  NUM_FOR_COLOR = { 1 => 'RED', 2 => 'GREEN', 3 => 'BLUE', 4 => 'YELLOW', 5 => 'ORANGE', 6 => 'PURPLE' }.freeze
+  NUM_FOR_COLOR = { 1 => 'RED', 2 => 'GREEN', 3 => 'BLUE', 4 => 'YELLOW', 5 => 'CYAN', 6 => 'PURPLE' }.freeze
   MIN_COLOR = 1
   MAX_COLOR = 6
   def initialize

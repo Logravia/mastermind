@@ -2,12 +2,13 @@
 
 class Game
   LAST_ROUND = 12
-  attr_reader :coder, :guesser
+  attr_reader :coder, :guesser, :display
   attr_accessor :cur_guess, :history, :round
   private_constant :LAST_ROUND
   def initialize
     @coder = ComputerCoder.new
     @guesser = PlayerDecoder.new
+    @display = Display.new
     @history = {}
     @cur_guess = []
     @cur_hint = {}
@@ -18,7 +19,7 @@ class Game
     until round == LAST_ROUND
       cur_guess  = guesser.guess
       cur_hint = coder.hint(cur_guess)
-
+      display.show_code(cur_guess)
       victory if coder.perfect_guess? cur_guess
 
       save_result(cur_guess, cur_hint, round)
