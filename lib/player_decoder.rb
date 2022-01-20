@@ -37,6 +37,7 @@ class PlayerDecoder
 
   def valid_input?(choice)
     return false if choice.chars.length != 2
+
     location, letter = format_choice(choice)
     location.between?(MIN_CHOICE, MAX_CHOICE) and LETTER_COLOR.key? letter
   end
@@ -54,13 +55,13 @@ class PlayerDecoder
   end
 
   def reset_guess
-   cur_guess.map! {nil}
+    cur_guess.map! { nil }
   end
 
   private_constant :LETTER_COLOR
   attr_reader :cur_guess
 
   private
-  attr_writer :cur_guess
 
+  attr_writer :cur_guess
 end
