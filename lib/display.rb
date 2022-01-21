@@ -1,23 +1,37 @@
+# frozen_string_literal: true
+
 require 'pry-byebug'
 
 class Display
-  COLOR_BLOCKS = {RED:"\e[41m", GREEN: "\e[42m", YELLOW: "\e[43m", BLUE: "\e[44m", PURPLE: "\e[45m", CYAN: "\e[46m", BLACK_FONT: "\e[30m", END: "\e[39m\e[49m"}
+  COLOR_BLOCKS = { RED: "\e[41m", GREEN: "\e[42m", YELLOW: "\e[43m", BLUE: "\e[44m", PURPLE: "\e[45m", CYAN: "\e[46m",
+                   BLACK_FONT: "\e[30m", END: "\e[39m\e[49m" }.freeze
   private_constant :COLOR_BLOCKS
-  def initialize
-  end
-  def show_code(code)
-    print COLOR_BLOCKS[:BLACK_FONT]
-    code.each_with_index do |color, index|
-      print "#{COLOR_BLOCKS[color.to_sym]} #{index+1} "
-    end
-    puts COLOR_BLOCKS[:END]
+  def initialize; end
+
+  def choices
+    # TODO: Print available choices
   end
 
-  def show_history(history)
+  def rules; end
+
+  def show_code(code)
+    code.each_with_index do |color, index|
+      print COLOR_BLOCKS[:BLACK_FONT]
+      print "#{COLOR_BLOCKS[color.to_sym]} #{index + 1} "
+      print "#{COLOR_BLOCKS[:END]} "
+    end
+  end
+
+  def history(history)
+    history.each do |guess_round, hint|
+      print "ROUND #{guess_round[:round] + 1}: "
+      show_code(guess_round[:guess])
+      print "\n"
+      print "PERFECT: #{hint[:perfect]} PARTIAL: #{hint[:partial]}\n"
+    end
   end
 
   def clear
-    system "clear"
+    system 'clear'
   end
-
 end

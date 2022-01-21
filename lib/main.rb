@@ -5,5 +5,5 @@ require_relative 'computer_coder'
 require_relative 'game'
 require_relative 'display'
 
-game = Game.new()
-game.play()
+game = Game.new
+game.play

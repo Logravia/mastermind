@@ -34,20 +34,20 @@ class PlayerDecoder
     [location, letter_sym]
   end
 
-  def get_choices()
-    print "> "
+  def get_choices
+    print '> '
     input = gets
     exit if input == "q\n"
     # Pattern gets you 1R, but only if whitespace follows it
-    pattern = /[1-4][RGBYOP](?=\s)/
+    pattern = /[1-4][RGBYCP](?=\s)/
     choices = input.scan(pattern)
-    bad_input_msg if choices.length == 0
+    bad_input_msg if choices.length.zero?
     choices
   end
 
   def save_choices(choices)
     choices[0...4].each do |choice|
-     save(format_choice(choice))
+      save(format_choice(choice))
     end
   end
 
@@ -61,6 +61,5 @@ class PlayerDecoder
   end
 
   private_constant :LETTER_COLOR, :MIN_CHOICE, :MAX_CHOICE
-  attr_writer :cur_guess
-  attr_reader :cur_guess
+  attr_accessor :cur_guess
 end

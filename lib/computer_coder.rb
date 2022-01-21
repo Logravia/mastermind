@@ -19,6 +19,7 @@ class ComputerCoder
   end
 
   private
+
   def matches(guess)
     perfect_matches = 0
     guess.each_with_index do |color, location|
@@ -33,8 +34,8 @@ class ComputerCoder
   # Each element that was the same and at the same location in both arrays
   # Is replaced with nil, in other words perfect matches are removed
   def no_perfect_matches(guess, code)
-   guess = guess.dup
-   code = code.dup
+    guess = guess.dup
+    code = code.dup
     guess.each_with_index do |color, location|
       if code[location] == color
         guess[location] = nil
