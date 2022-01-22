@@ -33,5 +33,6 @@ class ComputerCoder
   end
 
   attr_reader :code_to_break
+
   private_constant :NUM_FOR_COLOR, :MIN_COLOR, :MAX_COLOR
 end

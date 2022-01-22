@@ -8,7 +8,7 @@ class Game
   private_constant :LAST_ROUND
   def initialize
     @coder = ComputerCoder.new
-    @guesser = PlayerDecoder.new
+    @guesser = ComputerDecoder.new
     @display = Display.new
     @history = {}
     @cur_guess = []
@@ -20,8 +20,7 @@ class Game
     until round == LAST_ROUND
       cur_guess = guesser.guess
       cur_hint = coder.hint(cur_guess)
-      # Test victory condition
-
+      guesser.save_guess_result(cur_hint)
       save_result(cur_guess, cur_hint, round)
       display.clear
       display.history(history)
