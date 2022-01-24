@@ -1,44 +1,31 @@
 # frozen_string_literal: true
 
 module ProcessCode
-  def self.matches(guess, code)
+  def self.match_result(guess, code)
     perfect_matches = 0
-    guess.each_with_index do |color, location|
-      perfect_matches += 1 if code[location] == color
-    end
-    perfect_matches
-  end
-
-  # All perfect matches can also be partial matches
-  # Thus muddying waters for an algorithm trying to find only partial matches
-  # Returns modified array of the two given arrays
-  # Each element with the same value and index
-  # Is replaced with nil, in other words perfect matches are removed
-  def self.no_perfect_matches(guess, code)
-    guess = guess.dup
+    # I don't want to modify original values as they will be used later on
     code = code.dup
+    guess = guess.dup
     guess.each_with_index do |color, location|
-      if code[location] == color
-        guess[location] = nil
-        code[location] = nil
-      end
+      next unless code[location] == color
+
+      perfect_matches += 1
+      # Not removing perfect matches makes it impossible to find partial matches
+      code[location] = nil
+      guess[location] = nil
     end
-    [guess, code]
+    [perfect_matches, partial_matches(guess, code)]
   end
 
-  # Partial
   def self.partial_matches(guess, code)
     partial_match_count = 0
-    guess, code = no_perfect_matches(guess, code)
     guess.each do |color|
-      next unless code.include?(color) && !color.nil?
+      partial_match_place = code.find_index color
+      next unless !partial_match_place.nil? && !color.nil?
 
-      index_to_remove = code.find_index color
       # When a partial match is found the pairs are removed,
-      # so that you couldn't have a partial match again with that color
-      # One pair is "removed" by incrementing to next element
-      # The other by declaring it nil
-      code[index_to_remove] = nil
+      # so that you couldn't have a partial match again with the same element
+      code[partial_match_place] = nil
       partial_match_count += 1
     end
     partial_match_count

@@ -14,14 +14,15 @@ class ComputerCoder
   extend ProcessCode
 
   def hint(guess)
-    { perfect: ProcessCode.matches(guess, code_to_break), partial: ProcessCode.partial_matches(guess, code_to_break) }
+    result = ProcessCode.match_result(guess, code_to_break)
+    { perfect: result[0], partial: result[1] }
   end
 
   def perfect_guess?(guess)
     guess == code_to_break
   end
 
-  private
+  # private
 
   def random_code
     code = []

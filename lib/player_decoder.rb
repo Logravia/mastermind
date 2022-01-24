@@ -21,6 +21,10 @@ class PlayerDecoder
     cur_guess
   end
 
+  def save_guess_result(_argument)
+    nil
+  end
+
   private
 
   def bad_input_msg
