@@ -6,10 +6,16 @@ class Display
   COLOR_BLOCKS = { RED: "\e[41m", GREEN: "\e[42m", YELLOW: "\e[43m", BLUE: "\e[44m", PURPLE: "\e[45m", CYAN: "\e[46m",
                    BLACK_FONT: "\e[30m", END: "\e[39m\e[49m" }.freeze
   private_constant :COLOR_BLOCKS
-  def initialize; end
+
+  CHOICES = ["RED", "GREEN", "YELLOW", "BLUE", "PURPLE", "CYAN"]
 
   def choices
-    # TODO: Print available choices
+    puts "These are your colors to choose from: "
+    CHOICES.each_with_index do |color, i|
+      print COLOR_BLOCKS[:BLACK_FONT]
+      print "#{COLOR_BLOCKS[color.to_sym]} #{CHOICES[i][0]} "
+      print "#{COLOR_BLOCKS[:END]} "
+    end
   end
 
   def rules; end

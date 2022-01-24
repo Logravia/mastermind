@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative 'process_code'
-
 class ComputerDecoder
-  NUM_FOR_COLOR = { 1 => 'RED', 2 => 'GREEN', 3 => 'BLUE', 4 => 'YELLOW', 5 => 'CYAN', 6 => 'PURPLE' }.freeze
   extend ProcessCode
+
+  NUM_FOR_COLOR = { 1 => 'RED', 2 => 'GREEN', 3 => 'BLUE', 4 => 'YELLOW', 5 => 'CYAN', 6 => 'PURPLE' }.freeze
+
   def initialize
-    @possible_guesses =  [1,2,3,4,5,6].repeated_permutation(4).to_a
+    @possible_guesses = [1, 2, 3, 4, 5, 6].repeated_permutation(4).to_a
     @cur_guess = [1, 1, 2, 2]
     @guess_result = { perfect: nil, partial: nil }
   end
@@ -18,11 +18,11 @@ class ComputerDecoder
   end
 
   # We remove all the guesses from possible guesses
-  # that do not match with the OUR GIVEN GUESS
-  # in the same way the SECRET CODE we are trying to break matched
+  # that do not match with the our given guess
+  # in the same way the SECRET CODE matched.
   def rm_impossible_guesses
-    possible_guesses.reject! do |guess|
-      ProcessCode.match_result(guess, cur_guess) != [guess_result[:perfect], guess_result[:partial]]
+    possible_guesses.select! do |guess|
+      ProcessCode.match_result(guess, cur_guess) == [guess_result[:perfect], guess_result[:partial]]
     end
   end
 

@@ -1,34 +1,60 @@
 # frozen_string_literal: true
 
 require 'pry-byebug'
+require_relative 'coder_helper'
+require_relative 'input_helper'
 
 # Manages input from player to construct a code
-class PlayerDecoder
+class Player
+  include CoderHelper
+  extend InputHelper
+
+  ACCEPTABLE_CHOICES = /[1-4][RGBYCP](?=\s)/
+
   LETTER_COLOR = { R: 'RED', G: 'GREEN', B: 'BLUE', Y: 'YELLOW', C: 'CYAN', P: 'PURPLE' }.freeze
+
   MIN_CHOICE = 1
   MAX_CHOICE = 4
 
-  def initialize
+  def initialize(role = 'decoder')
     @cur_guess = Array.new(4)
+    @display = Display.new
+    if role == 'coder'
+      coder_msg
+      guess
+      @code_to_break = @cur_guess
+    end
+  end
+
+
+  def process_guess_result(_argument)
+    nil
   end
 
   def guess
+    display.choices
     reset_guess
     loop do
-      save_choices(get_choices)
+      save_choices(InputHelper.get_choices(ACCEPTABLE_CHOICES))
       break if cur_guess.none? nil
     end
     cur_guess
   end
 
-  def save_guess_result(_argument)
-    nil
-  end
-
   private
 
-  def bad_input_msg
-    puts 'Seems like your input was invalid. Try again or press q to quit.'
+  def coder_msg
+    puts "Bad choice.\nTime to construct a code the computer will break in a second."
+
+    puts 'Here are the rules: '
+    puts 'There are 6 colors to choose from:'
+    puts '[R]ed, [G]reen, [B]lue, [Y]ellow, [C]yan, [P]urple'
+    puts 'You can place these colors in any one of four squares'
+    puts '[1] [2] [3] [4]'
+    puts 'Each square must have a color'
+    puts 'Choose the square and the color like this: 1R'
+    puts 'Or like this: 1Y 2B 3G 4R'
+    puts 'Or like this 1B 4G 2Y, I don\'t care. Just give me the number and the color.'
   end
 
   # Turns raw String input into [location_int, :color_letter]
@@ -38,16 +64,6 @@ class PlayerDecoder
     [location, letter_sym]
   end
 
-  def get_choices
-    print '> '
-    input = gets
-    exit if input == "q\n"
-    # Pattern gets you 1R, but only if whitespace follows it
-    pattern = /[1-4][RGBYCP](?=\s)/
-    choices = input.scan(pattern)
-    bad_input_msg if choices.length.zero?
-    choices
-  end
 
   def save_choices(choices)
     choices[0...4].each do |choice|
@@ -64,6 +80,7 @@ class PlayerDecoder
     cur_guess.map! { nil }
   end
 
-  private_constant :LETTER_COLOR, :MIN_CHOICE, :MAX_CHOICE
+  private_constant :LETTER_COLOR, :MIN_CHOICE, :MAX_CHOICE, :ACCEPTABLE_CHOICES
   attr_accessor :cur_guess
+  attr_reader :code_to_break, :display
 end

@@ -2,6 +2,8 @@
 
 require 'pry-byebug'
 require_relative 'process_code'
+require_relative 'coder_helper'
+
 # Manages creation of a random color code, checking it against player's guess and giving hint based on the guess
 class ComputerCoder
   NUM_FOR_COLOR = { 1 => 'RED', 2 => 'GREEN', 3 => 'BLUE', 4 => 'YELLOW', 5 => 'CYAN', 6 => 'PURPLE' }.freeze
@@ -12,17 +14,9 @@ class ComputerCoder
   end
 
   extend ProcessCode
+  include CoderHelper
 
-  def hint(guess)
-    result = ProcessCode.match_result(guess, code_to_break)
-    { perfect: result[0], partial: result[1] }
-  end
-
-  def perfect_guess?(guess)
-    guess == code_to_break
-  end
-
-  # private
+  private
 
   def random_code
     code = []
